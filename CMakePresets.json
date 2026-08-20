@@ -1,0 +1,121 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": { "major": 3, "minor": 24, "patch": 0 },
+    "configurePresets": [
+        {
+            "name": "msvc-base",
+            "hidden": true,
+            "generator": "Visual Studio 17 2022",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_CXX_STANDARD": "20"
+            }
+        },
+        {
+            "name": "msvc-debug",
+            "inherits": "msvc-base",
+            "displayName": "MSVC Debug",
+            "description": "Primary development loop. /W4 /permissive- via workbook_warnings.",
+            "cacheVariables": {
+                "CMAKE_CONFIGURATION_TYPES": "Debug"
+            }
+        },
+        {
+            "name": "msvc-release",
+            "inherits": "msvc-base",
+            "displayName": "MSVC Release",
+            "description": "Optimized build for performance-chapter measurement work.",
+            "cacheVariables": {
+                "CMAKE_CONFIGURATION_TYPES": "Release"
+            }
+        },
+        {
+            "name": "wsl-base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_STANDARD": "20"
+            }
+        },
+        {
+            "name": "wsl-clang-debug",
+            "inherits": "wsl-base",
+            "displayName": "WSL Clang Debug",
+            "description": "Cross-toolchain correctness check.",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "wsl-gcc-debug",
+            "inherits": "wsl-base",
+            "displayName": "WSL GCC Debug",
+            "description": "Cross-toolchain correctness check.",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        },
+        {
+            "name": "wsl-clang-asan",
+            "inherits": "wsl-base",
+            "displayName": "WSL Clang + ASan",
+            "description": "AddressSanitizer. One sanitizer per preset, never combined.",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++",
+                "WORKBOOK_SANITIZER": "address"
+            }
+        },
+        {
+            "name": "wsl-clang-ubsan",
+            "inherits": "wsl-base",
+            "displayName": "WSL Clang + UBSan",
+            "description": "UndefinedBehaviorSanitizer. MSVC has no equivalent — see README.md's sanitizer matrix.",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++",
+                "WORKBOOK_SANITIZER": "undefined"
+            }
+        },
+        {
+            "name": "wsl-clang-tsan",
+            "inherits": "wsl-base",
+            "displayName": "WSL Clang + TSan",
+            "description": "ThreadSanitizer. Required grading gate for Ch11 data-race-free acceptance criteria — not available under MSVC.",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++",
+                "WORKBOOK_SANITIZER": "thread"
+            }
+        },
+        {
+            "name": "wsl-clang-msan",
+            "inherits": "wsl-base",
+            "displayName": "WSL Clang + MSan",
+            "description": "MemorySanitizer (Clang only). Required for Ch07/Ch09 uninitialized-read problems — not available under MSVC or GCC.",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++",
+                "WORKBOOK_SANITIZER": "memory"
+            }
+        }
+    ],
+    "buildPresets": [
+        { "name": "msvc-debug", "configurePreset": "msvc-debug", "configuration": "Debug" },
+        { "name": "msvc-release", "configurePreset": "msvc-release", "configuration": "Release" },
+        { "name": "wsl-clang-debug", "configurePreset": "wsl-clang-debug" },
+        { "name": "wsl-gcc-debug", "configurePreset": "wsl-gcc-debug" },
+        { "name": "wsl-clang-asan", "configurePreset": "wsl-clang-asan" },
+        { "name": "wsl-clang-ubsan", "configurePreset": "wsl-clang-ubsan" },
+        { "name": "wsl-clang-tsan", "configurePreset": "wsl-clang-tsan" },
+        { "name": "wsl-clang-msan", "configurePreset": "wsl-clang-msan" }
+    ],
+    "testPresets": [
+        { "name": "msvc-debug", "configurePreset": "msvc-debug", "configuration": "Debug", "output": { "outputOnFailure": true } },
+        { "name": "msvc-release", "configurePreset": "msvc-release", "configuration": "Release", "output": { "outputOnFailure": true } },
+        { "name": "wsl-clang-debug", "configurePreset": "wsl-clang-debug", "output": { "outputOnFailure": true } },
+        { "name": "wsl-gcc-debug", "configurePreset": "wsl-gcc-debug", "output": { "outputOnFailure": true } },
+        { "name": "wsl-clang-asan", "configurePreset": "wsl-clang-asan", "output": { "outputOnFailure": true } },
+        { "name": "wsl-clang-ubsan", "configurePreset": "wsl-clang-ubsan", "output": { "outputOnFailure": true } },
+        { "name": "wsl-clang-tsan", "configurePreset": "wsl-clang-tsan", "output": { "outputOnFailure": true } },
+        { "name": "wsl-clang-msan", "configurePreset": "wsl-clang-msan", "output": { "outputOnFailure": true } }
+    ]
+}
